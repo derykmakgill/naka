@@ -1,0 +1,259 @@
+<html lang="en">
+<head itemscope="itemscope" itemtype="https://schema.org/WebSite">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="James R Meyer">
+<link rel="index" href="https://www.jamesrmeyer.com/">
+<link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+<script>document.documentElement.className = 'hasJS';</script>
+<style>
+.btn {
+display: block;
+padding: .25em 2em;
+color: #1C2A1C;
+text-decoration: none;
+font-size:1.2em;
+cursor: pointer;
+text-align: center;margin-left: auto;margin-right: auto;
+outline: 0;
+background-color: #d6d6d6;
+}
+button::-moz-focus-inner {
+ border: 0;
+ 
+ @charset "utf-8";
+
+span[class^="footnote"] {display:block;}
+ 
+.hasJS span[class^="footnote"], .hasJS span[class ='tipContent'] {display:none;}    /* prevents page load flicker if JavaScript operative */
+ 
+.unhideTip {
+  display: table-cell !important;
+  position:relative;
+}
+ 
+.hideTip {
+  display: none;
+  position:relative;
+}
+
+ 
+.invis{ /* Hide visually, but will be read by a screen reader - to work for all browsers*/
+  border: 0;
+  clip: rect(0,0,0,0);
+	clip-path: inset(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  left:-9999px;
+  top:auto;
+}
+ 
+.fnNum, .fnNumBase{white-space:nowrap;}
+
+.fnNum {cursor: pointer;} /* make the pointer act as a link cursor over the brackets as well as the footnote reference number */
+
+.tipContent{ /* very basic formatting of the footnote tooltip */
+	width: auto;
+	border:#000 solid 1px;
+}
+
+.fnNum a, .fnNumBase a {
+text-decoration:none;
+}
+
+#SideBox{
+	float:right;
+	width:25em;
+	max-width:50%;
+	border:#000 solid 1px;	
+	padding:1em .5em .75em 1em;
+	margin:.3em .2em .5em .5em;
+}
+
+/*#FootnotesSide .fnNumBase {background: #DDD;}*/
+/* ############ Formatting of Footnote numbers ############## */
+/*.fnNum, .fnNumBase{
+	background-color: #FFE680;
+	white-space:nowrap;
+	z-index:400;
+	font-size:0.8em;
+}
+.fnNumBase {clear: both;
+float: left;
+font-size:0.9em;
+padding: 0 0.08em 0.1em 0.08em;
+}
+
+.fnTextBase {
+	padding-left: 2.5em;
+	display:block;
+	font-size:0.9em;
+	padding-bottom:0.312em;
+}
+.fnNumIn{
+	vertical-align: 0;
+	position: relative;
+	top: .2ex;
+}*/
+/* ############  Formatting of Tooltips ############## */
+/*.tipContent{
+	width: auto;
+	max-width:95%;
+	z-index:1080;
+	position:relative; 
+	margin: 0 auto 0.5em auto;
+	padding:0.19em 0.375em 0.23em 0.375em;
+	border:#A09050 solid 0.19em;
+	color:#001D47;
+	background-color:#fefded; 
+	box-shadow: 0.5em 1em 1.25em rgba(15, 36, 27, 0.62);
+	text-align:left;
+	border-radius:0.35em;
+}*/
+
+.invis, .unhideTip, .hideTip{display:none;}
+ 
+.fnNum, .fnNumBase{white-space:nowrap;}
+
+.fnNum a, .fnNumBase a {text-decoration:none; color:#000;}
+
+.btn{display:none !important;}
+}
+</style>
+<title itemprop="name">LL: Demo for Easily Maintainable Footnotes</title>
+<meta name="description" content="Demonstration page for the Easy Footnotes System.">
+<script>
+function toggle() {
+		var el = document.getElementById("basicStyle");
+		if (el.href.match("footnotes-demo.css")) {
+				el.href = "footnotes-demo-pretty.css";		
+		}
+		else {
+				el.href = "footnotes-demo.css";	
+		}
+	// alert("<link> href is now: " + el.href)
+}
+</script>
+</head>
+<body>
+
+{{ content }}
+
+<script>// ############## start of document ready function ###################
+// This function is to run the JavaScript code once the page is loaded.
+// If you already have such a function just call the SetupTips function
+// from your document ready function.
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    SetupTips();
+
+});
+// ############## end of document ready function ####################
+
+// ###### Tooltips function which includes setup of footnotes #######
+function SetupTips() {
+
+  var fnNumber = 0;
+  var myid = '';
+  var clsStart, clsEnd;
+  var myClassList, myClass;
+  var baseHide, baseFn;
+  var myFn, i = 0, j = 0, len, clL;
+
+  try { 
+
+    var fnotes = document.querySelectorAll('span[class^=footnote]');
+    // the footnotes = all spans which include a class name that begins with "footnote"
+   
+    for (i = 0, len = fnotes.length; i < len; i++) {
+      myFn = fnotes[i];
+      myClassList = myFn.classList;
+      for (j = 0, clL = myClassList.length; j < clL; j++) {
+        myClass = myClassList[j];
+
+          if (clsEnd !== myClass.substr(8)) { // then we have a new footnotes section
+            clsEnd = myClass.substr(8); // this identifies the section
+            // add a hidden link to skip the section
+            document.getElementById('Footnotes' + clsEnd).insertAdjacentHTML('beforebegin', '<a href="#Footnotes' + clsEnd + '-End"><span class="invis">Skip footnote section</span></a>');
+            // add the hidden div to where that link goes to
+            document.getElementById('Footnotes' + clsEnd).insertAdjacentHTML('afterend', '<div class="invis" id="Footnotes' + clsEnd + '-End"></div>');
+          }
+
+        // now do the footnotes
+        clsStart = myClass.substr(0, 8);
+        if (clsStart === 'footnote') { // we have a footnote
+          fnNumber = i + 1; // array starts with 0; we want notes to start with 1
+          myid = 'Fn_' + fnNumber + '_' + clsEnd; // unique footnote reference
+
+          myFn.id = myid; //set the id of the footnote
+          myFn.classList.add('hideTip'); // hide the footnote in the text
+          myFn.classList.add('tipContent'); // add class for styling the tooltip
+          myFn.setAttribute('role', 'note'); //add ARIA attribute for accessibility
+
+          // add the footnote reference to the text
+          myFn.insertAdjacentHTML('beforebegin', '<sup class="fnNum"><a title="Link to footnote" id="' + myid + 'a" onclick="showHide(&quot;' + myid + '&quot;);return false;">[<span class="invis">Footnote </span><span class="fnNumIn">' + fnNumber + '</span>]</a></sup>');
+          // insert footnote number and the footnote where the footnotes are required to appear
+          document.getElementById('Footnotes' + clsEnd).innerHTML += '<p><span class="fnNumBase"><a href="#' + myid + 'a" title="Footnote location">[<span class="invis">Location of footnote </span><span class="fnNumIn">' + fnNumber + '</span>]</a> </span><span role="note" id="' + myid + 'Base" class="fnTextBase">' + myFn.innerHTML + '</span></p>';
+
+          myFn.classList.remove(myClass); // remove extraneous stuff from the footnote tooltip
+          myFn.getElementsByClassName('fnHide')[0].insertAdjacentHTML('afterend', fnNumber + ': '); // add the footnote number to the tooltip
+
+          // remove the "hidden" (Footnote: and ) opening and closing tags of the footnotes in the collective section
+          baseFn = document.getElementById(myid + 'Base');
+          baseHide = baseFn.getElementsByClassName('fnHide');
+          while (baseHide[0]) {
+            baseFn.removeChild(baseHide[0]);
+          } 
+        }
+      }
+    }
+
+    // Make the appropriate parts of the footnotes invisible except to screen readers
+    var fnHides = document.getElementsByClassName('fnHide');
+    [].forEach.call(fnHides, function (el) {
+      el.classList.add('invis');
+    });
+
+  } // end of try
+  catch (e) {
+    //catch and just suppress error
+    // alert("fn: " + e);
+  }
+}
+// #################  End of Tooltips function ######################
+ 
+// ############## Function to set up showing or hiding of text #######
+function showHide(divID) {
+    var myDiv = document.getElementById(divID);
+    try {
+        if (myDiv.classList.contains('hideTip')) {
+            myDiv.classList.remove('hideTip');
+            myDiv.classList.add('unhideTip');
+            if (divID.substr(0, 3) === 'Fn_') {
+              // For if tip is a footnote replace number with an x
+                document.getElementById(divID + 'a').innerHTML = '[<span class="fnNumIn">&#x2716;</span>]';
+            }
+        } else {
+            myDiv.classList.remove('unhideTip');
+            myDiv.classList.add('hideTip');
+            if (divID.substr(0, 3) === 'Fn_') {
+              // For if tip is a footnote, restore the reference number
+                document.getElementById(divID + 'a').innerHTML = '[<span class="invis">Footnote </span><span class="fnNumIn">' + divID.substr(3).split('_')[0] + '</span>]';
+            }
+        }
+    }
+    catch (e) {
+      // alert(e);
+    }
+}
+// ######## End of function to set up showing or hiding of text #######
+  </script>
+
+</body>
+</html>
+
