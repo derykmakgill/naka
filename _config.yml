@@ -1,7 +1,7 @@
 collections:
   docs:
     output: true
-    permalink: /docs/:category/:path/
+    permalink: /docs/:path/
   emails:
     output: true
     permalink: /emails/:year/:month/:day/:path/
