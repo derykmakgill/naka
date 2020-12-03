@@ -7,7 +7,7 @@ collections:
     permalink: /web/:path/
   emails:
     output: true
-    permalink: /emails/:year/:month/:day/:path/
+    permalink: /emails/:path/
   pages:
     output: true
     permalink: /:path/
