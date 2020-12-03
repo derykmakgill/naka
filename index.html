@@ -10,7 +10,7 @@ Over the past few many years, a deliberate and well-funded effort has gone into 
 {% assign documents = site.documents | sort: 'date' | reverse %}
 
 {% for document in documents limit:500 %}
-  {% if document.layout == 'post' %}
+  {% if document.layout == 'email' %}
 <div class="article">
         <span class="date">{{ document.date | date: "%Y-%m-%d" }}</span>
 
