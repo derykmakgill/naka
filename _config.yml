@@ -1,0 +1,13 @@
+collections:
+  docs:
+    output: true
+    permalink: /docs/:category/:path/
+  emails:
+    output: true
+    permalink: /emails/:year/:month/:day/:path/
+  pages:
+    output: true
+    permalink: /:path/
+
+
+markdown: kramdown
