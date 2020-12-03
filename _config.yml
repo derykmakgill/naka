@@ -2,6 +2,9 @@ collections:
   docs:
     output: true
     permalink: /docs/:path/
+  web: 
+    output: true
+    permalink: /web/:path/
   emails:
     output: true
     permalink: /emails/:year/:month/:day/:path/
